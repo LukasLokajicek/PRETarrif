@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th th:each="state : ${timeSheet}"
+            th:text="${{state.getState()}}"
+            th:style="'border-bottom: 1px solid black; ' + ${state.getState() == T(cz.lokajicek.lukas.pretariffreader.model.State).OFF ? 'border-right: 1px solid black': ''}">
+            ON/OFF
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:each="state : ${timeSheet}"
+            th:text="${{state.getHour()}}"
+            th:style="${state.getState() == T(cz.lokajicek.lukas.pretariffreader.model.State).OFF ? 'border-right: 1px solid black': ''}">
+            Time
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

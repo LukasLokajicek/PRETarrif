@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "app.excel.location",
+      "type": "java.lang.String",
+      "description": "Description for app.excel.location."
+  }
+] }
