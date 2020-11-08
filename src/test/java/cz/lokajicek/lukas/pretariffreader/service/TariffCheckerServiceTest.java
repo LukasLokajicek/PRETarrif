@@ -11,25 +11,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Set;
 
 @SpringBootTest
-class TariffCheckerTest {
+class TariffCheckerServiceTest {
 
     Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Autowired
-    private TariffChecker tariffChecker;
+    private TariffCheckerService tariffChecker;
 
     @Test
     void isSheetValid() {
-        Assertions.assertFalse(tariffChecker.isSheetValid(LocalDate.of(2020, 10, 22)));
-        Assertions.assertTrue(tariffChecker.isSheetValid(LocalDate.of(2020, 10, 20)));
+        Assertions.assertFalse(tariffChecker.isSheetValid(LocalDate.of(2020, 10, 23)));
+        Assertions.assertTrue(tariffChecker.isSheetValid(LocalDate.of(2020, 10, 22)));
+        Assertions.assertTrue(tariffChecker.isSheetValid(LocalDate.of(2020, 10, 21)));
     }
 
     @Test
     void getDayTimeSheet() {
-        final List<StateHour> dayTimeSheet = tariffChecker.getDayTimeSheet(LocalDate.of(2020, 10, 15), 573);
+        final Set<StateHour> dayTimeSheet = tariffChecker.getDayTimeSheet(LocalDate.of(2020, 10, 15), 573);
         logger.info("Timesheet for 15. 10. 2020 is: {}.", dayTimeSheet);
         Assertions.assertTrue(dayTimeSheet.contains(new StateHour(State.OFF, LocalTime.of(0, 0), 0)));
         Assertions.assertTrue(dayTimeSheet.contains(new StateHour(State.ON, LocalTime.of(1, 0), 1)));

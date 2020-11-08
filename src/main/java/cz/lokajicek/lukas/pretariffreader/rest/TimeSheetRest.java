@@ -1,7 +1,7 @@
 package cz.lokajicek.lukas.pretariffreader.rest;
 
 import cz.lokajicek.lukas.pretariffreader.model.StateHour;
-import cz.lokajicek.lukas.pretariffreader.service.TariffChecker;
+import cz.lokajicek.lukas.pretariffreader.service.TariffCheckerService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,16 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/timesheet")
 public class TimeSheetRest {
 
 
-    private final TariffChecker tariffChecker;
+    private final TariffCheckerService tariffChecker;
 
-    public TimeSheetRest(TariffChecker tariffChecker) {
+    public TimeSheetRest(TariffCheckerService tariffChecker) {
         this.tariffChecker = tariffChecker;
     }
 

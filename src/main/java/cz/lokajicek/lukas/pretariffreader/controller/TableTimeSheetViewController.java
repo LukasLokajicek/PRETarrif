@@ -1,7 +1,7 @@
 package cz.lokajicek.lukas.pretariffreader.controller;
 
 import cz.lokajicek.lukas.pretariffreader.model.StateHour;
-import cz.lokajicek.lukas.pretariffreader.service.TariffChecker;
+import cz.lokajicek.lukas.pretariffreader.service.TariffCheckerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +11,11 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 @Controller
-public class TableTimeSheetView {
+public class TableTimeSheetViewController {
 
-    private final TariffChecker tariffChecker;
+    private final TariffCheckerService tariffChecker;
 
-    public TableTimeSheetView(TariffChecker tariffChecker) {
+    public TableTimeSheetViewController(TariffCheckerService tariffChecker) {
         this.tariffChecker = tariffChecker;
     }
 
