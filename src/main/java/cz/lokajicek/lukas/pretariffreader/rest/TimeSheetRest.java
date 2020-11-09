@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @RestController
@@ -31,5 +32,10 @@ public class TimeSheetRest {
     public Collection<StateHour> getStateHours(@PathVariable int tariff,
                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date) {
         return tariffChecker.getDayTimeSheet(date, tariff);
+    }
+
+    @GetMapping("/{tariff}/next_off_in_sec")
+    public Long getNextOffTimeInSec(@PathVariable int tariff) {
+        return tariffChecker.getNextOffTimeInSec(tariff, LocalDateTime.now());
     }
 }

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.comparator.Comparators;
 
@@ -73,8 +74,9 @@ public class ExcelReaderService {
         return commands;
     }
 
-    public Map<String, Set<StateHour>> getTimeSheet(Optional<Sheet> sheet, int command) {
-        Map<String, Set<StateHour>> map = new HashMap<>();
+    @Cacheable(cacheNames = "timeSheetCache")
+    public Map<String, SortedSet<StateHour>> getTimeSheet(Optional<Sheet> sheet, int command) {
+        Map<String, SortedSet<StateHour>> map = new HashMap<>();
         sheet.ifPresent(s -> {
             final Integer rowNumber = extractCommandRowPairs(s).get(command);
             if (rowNumber != null) {
@@ -82,7 +84,7 @@ public class ExcelReaderService {
                     final Row row = s.getRow(rowNumber + cnt);
                     final Cell dayCell = row.getCell(locationConfiguration.getDayColumn(), Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
                     final String dayString = dayCell.getStringCellValue();
-                    final Set<StateHour> stateHours = readOnOffSequences(row);
+                    final SortedSet<StateHour> stateHours = readOnOffSequences(row);
                     map.put(dayString, stateHours);
                 }
             }
@@ -90,8 +92,8 @@ public class ExcelReaderService {
         return map;
     }
 
-    private Set<StateHour> readOnOffSequences(Row row) {
-        Set<StateHour> stateHours = new TreeSet<>();
+    private SortedSet<StateHour> readOnOffSequences(Row row) {
+        SortedSet<StateHour> stateHours = new TreeSet<>();
         final Integer min = Stream.of(locationConfiguration.getOnColumns(), locationConfiguration.getOffColumns())
                 .flatMap(Collection::stream)
                 .min(Comparators.comparable())

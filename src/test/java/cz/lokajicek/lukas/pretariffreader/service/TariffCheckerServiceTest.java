@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 @SpringBootTest
@@ -46,5 +48,29 @@ class TariffCheckerServiceTest {
         Assertions.assertTrue(dayTimeSheet.contains(new StateHour(State.ON, LocalTime.of(21, 20), 11)));
         Assertions.assertTrue(dayTimeSheet.contains(new StateHour(State.OFF, LocalTime.of(22, 0), 12)));
         Assertions.assertTrue(dayTimeSheet.contains(new StateHour(State.ON, LocalTime.of(0, 0), 13)));
+    }
+
+    @Test
+    void getNextOffTimeInSec_thatDay() {
+        LocalDateTime testTime = LocalDateTime.of(2020, 10, 15, 16, 35);
+        final Long nextOffTimeInSec = tariffChecker.getNextOffTimeInSec(573, testTime);
+        final long correctSeconds = testTime.toLocalTime().until(LocalTime.of(17, 40), ChronoUnit.SECONDS);
+        Assertions.assertEquals(correctSeconds, nextOffTimeInSec);
+    }
+
+    @Test
+    void getNextOffTimeInSec_nextDay() {
+        LocalDateTime testTimeForToday = LocalDateTime.of(2020, 10, 15, 22, 0);
+        final Long nextOffTimeInSec = tariffChecker.getNextOffTimeInSec(521, testTimeForToday);
+        final long correctSeconds = testTimeForToday.until(LocalDateTime.of(2020, 10, 16, 6, 40), ChronoUnit.SECONDS);
+        Assertions.assertEquals(correctSeconds, nextOffTimeInSec);
+    }
+
+    @Test
+    void getNextOffTimeInSec_midnight() {
+        LocalDateTime testTimeForToday = LocalDateTime.of(2020, 10, 15, 22, 1);
+        final Long nextOffTimeInSec = tariffChecker.getNextOffTimeInSec(573, testTimeForToday);
+        final long correctSeconds = testTimeForToday.until(LocalDateTime.of(2020, 10, 16, 1, 0), ChronoUnit.SECONDS);
+        Assertions.assertEquals(correctSeconds, nextOffTimeInSec);
     }
 }
